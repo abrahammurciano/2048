@@ -2,17 +2,11 @@
 using namespace std;
 
 int function rotate (int times);
-
 int function populate (int grid);
-
 void function display (int grid);
-
 int function move (int relativeGrid);
-
 int function joinSquares (int currentGrid, int grid);
-
 int function updateGrid (int currentGrid, int grid, int relativeGrid);
-
 bool function gameOver (int grid);
 
 int main () {
