@@ -24,7 +24,7 @@ int main () {
 		cin >> gridSize;
 	}
 
-  //	Define grid as mutidimentional array with the size from gridSize where the first level of the 
+	//	Define grid as mutidimentional array with the size from gridSize where the first level of the 
 	//	array will have the columns of the grid, and the second level will have rows. So for example, 
 	//	grid[0][2] will refer to the square which is in the 3rd column from the left and the first row 
 	//	from the bottom, and the value will be the number that should be in that square.
