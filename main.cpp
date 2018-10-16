@@ -22,12 +22,19 @@ int main () {
 		cin >> gridSize;
 	}
 
-	int grid [gridSize][gridSize];
+	int grid[gridSize][gridSize];
 	for (int x = 0; x < gridSize; x++) {
 		for (int y = 0; y < gridSize; y++) {
 			grid[x][y] = 0;
 		}
 	}
+	
+	//	Define relativeGrid as an array with 4 elements. Each element will contain a multidimensional
+	//	array similar to grid just that instead of containing the number that goes in each square, it 
+	//	will contain another array with the coordinates to get the actual value from grid. The purpose 
+	//	of this variable is to be able to manipulate the grid in the same way, no matter which direction 
+	//	the user wants to click
+	int relativeGrid[4][gridSize][gridSize][2];
 
 	return 0;
 }
