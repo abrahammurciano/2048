@@ -1,13 +1,19 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
-int*** rotate (int times, int gridSize);
+vector< vector < vector <int> > > rotate (int times, int gridSize);
 int populate (int grid);
 void display (int grid);
 int move (int relativeGrid);
 int joinSquares (int currentGrid, int grid);
 int updateGrid (int currentGrid, int grid, int relativeGrid);
 bool gameOver (int grid);
+
+typedef vector<int> int1D;
+typedef vector<int1D> int2D;
+typedef vector<int2D> int3D;
+typedef vector<int3D> int4D;
 
 int main () {
 
@@ -24,52 +30,42 @@ int main () {
 		cin >> gridSize;
 	}
 
-	//	Define grid as mutidimentional array with the size from gridSize where the first level of the 
+	//	Define grid as mutidimensional array with the size from gridSize where the first level of the 
 	//	array will have the columns of the grid, and the second level will have rows. So for example, 
 	//	grid[0][2] will refer to the square which is in the 3rd column from the left and the first row 
 	//	from the bottom, and the value will be the number that should be in that square.
-	int grid[gridSize][gridSize] = {};
+	int2D grid(gridSize, int1D(gridSize, 0));
 
 	//	Define relativeGrid as an array with 4 elements. Each element will contain a multidimensional
 	//	array similar to grid just that instead of containing the number that goes in each square, it 
-	//	will contain another array with the coordinates to get the actual value from grid. The purpose 
-	//	of this variable is to be able to manipulate the grid in the same way, no matter which direction 
-	//	the user wants to click
-	int*** relativeGrid[4];
-	for (int i = 0; i < 4; i++) {
-		relativeGrid[i] = rotate(i, gridSize);
-	}
-	
-	cout << relativeGrid[0][2][3][0] << relativeGrid[0][2][3][1];
-
-
-	return 0;
-}
-
-/*
- * will put the coordinates of each square in grid into a newGrid to return, 
- * but as if newGrid was rotated 90*times degrees clockwise. 
- * meaning, newGrid[1][2] will contain the coordinates to grid[2][2]. 
- * (as if you were looking at the grid from the left of it) 
- * return newGrid
- */
-int*** rotate (int times, int gridSize) {
-
-	//	int newGrid[gridSize][gridSize][2] = {};
-	int*** newGrid = new int**[gridSize];
-	for (int i = 0; i < times; i++) {
+	//	will contain another array with the coordinates to get the actual value from grid, just as if 
+	//	the relativeGrid was rotated r times clockwise. The purpose of this variable is to be able to 
+	//	manipulate the grid in the same way, no matter which direction the user wants to click
+	int4D relativeGrid(4, int3D(gridSize, int2D(gridSize, int1D(2, 0))));
+	for (int r = 0; r < 4; r++) {
+		cout << "Rotation " << r << ":" << endl;
 		for (int x = 0; x < gridSize; x++) {
-			newGrid[x] = new int*[gridSize];
 			for (int y = 0; y < gridSize; y++) {
-				newGrid[x][y] = new int[2];
-				newGrid[x][y][0] = y;
-				newGrid[x][y][1] = gridSize - 1 - x;
+				if (r == 0) {
+					cout << "(";
+					cout << (relativeGrid[r][x][y][0] = x);
+					cout << ",";
+					cout << (relativeGrid[r][x][y][1] = y);
+					cout << ") ";
+				} else {
+					cout << "(";
+					cout << (relativeGrid[r][x][y][0] = relativeGrid[r-1][x][y][1]);
+					cout << ",";
+					cout << (relativeGrid[r][x][y][1] = gridSize - 1 - relativeGrid[r-1][x][y][0]);
+					cout << ") ";
+				}
 			}
+			cout << endl;
 		}
 	}
 
-	return newGrid;
 
+	return 0;
 }
 
 /*
