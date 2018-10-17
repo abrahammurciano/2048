@@ -1,13 +1,19 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
-int rotate (int times);
+vector< vector < vector <int> > > rotate (int times, int gridSize);
 int populate (int grid);
 void display (int grid);
 int move (int relativeGrid);
 int joinSquares (int currentGrid, int grid);
 int updateGrid (int currentGrid, int grid, int relativeGrid);
 bool gameOver (int grid);
+
+typedef vector<int> int1D;
+typedef vector<int1D> int2D;
+typedef vector<int2D> int3D;
+typedef vector<int3D> int4D;
 
 int main () {
 
@@ -28,74 +34,74 @@ int main () {
 	//	array will have the columns of the grid, and the second level will have rows. So for example, 
 	//	grid[0][2] will refer to the square which is in the 3rd column from the left and the first row 
 	//	from the bottom, and the value will be the number that should be in that square.
-	int grid [gridSize][gridSize];
+	int2D grid(gridSize, int1D(gridSize, 0));
 
-	for (int x = 0; x < gridSize; x++) {
-		for (int y = 0; y < gridSize; y++) {
-			grid[x][y] = 0;
-		}
-	}
-	
 	//	Define relativeGrid as an array with 4 elements. Each element will contain a multidimensional
 	//	array similar to grid just that instead of containing the number that goes in each square, it 
-	//	will contain another array with the coordinates to get the actual value from grid. The purpose 
-	//	of this variable is to be able to manipulate the grid in the same way, no matter which direction 
-	//	the user wants to click
-	int relativeGrid[4][gridSize][gridSize][2];
+	//	will contain another array with the coordinates to get the actual value from grid, just as if 
+	//	the relativeGrid was rotated r times clockwise. The purpose of this variable is to be able to 
+	//	manipulate the grid in the same way, no matter which direction the user wants to click
+	int4D relativeGrid(4, int3D(gridSize, int2D(gridSize, int1D(2, 0))));
+	for (int r = 0; r < 4; r++) {
+		for (int x = 0; x < gridSize; x++) {
+			for (int y = 0; y < gridSize; y++) {
+				if (r == 0) {
+					cout << (relativeGrid[r][x][y][0] = x);
+					cout << (relativeGrid[r][x][y][1] = y);
+				} else {
+					cout << (relativeGrid[r][x][y][0] = relativeGrid[r-1][x][y][1]);
+					cout << (relativeGrid[r][x][y][1] = gridSize - 1 - relativeGrid[r-1][x][y][0]);
+				}
+			}
+			cout << endl;
+		}
+	}
+
 
 	return 0;
 }
 
-int rotate (int times) {
-	/*
-	 * will put the coordinates of each square in grid into a newGrid to return, 
-	 * but as if newGrid was rotated 90*times degrees clockwise. 
-	 * meaning, newGrid[1][2] will contain the coordinates to grid[2][2]. 
-	 * (as if you were looking at the grid from the left of it) 
-	 * return newGrid
-	 */ }
+/*
+ * stick some new squares into grid (according to rules of the game). returns grid
+ */
+int populate (int grid) { }
 
-int populate (int grid) {
-	/*
-	 * stick some new squares into grid (according to rules of the game). returns grid
-	 */ }
+/*
+ * Output the grid onto the terminal
+ * (Possibly can detect size of terminal and acomodate the grid accordingly)
+ * (Possibly use colours)
+ */
+void display (int grid) { }
 
-void display (int grid) {
-	/*
-	 * Output the grid onto the terminal
-	 * (Possibly can detect size of terminal and acomodate the grid accordingly)
-	 * (Possibly use colours)
-	 */ }
+/*
+ * moves all squares as far as it can in the direction direction.
+ * Will do so by swapping the coordinates of every non-zero square in relativeGrid
+ * (starting from bottom) with that of the lowest zero square below it and storing that 
+ * in currentGrid.
+ * return currentGrid
+ */
+int move (int relativeGrid) { }
 
-int move (int relativeGrid) {
-	/*
-	 * moves all squares as far as it can in the direction direction.
-	 * Will do so by swapping the coordinates of every non-zero square in relativeGrid
-	 * (starting from bottom) with that of the lowest zero square below it and storing that 
-	 * in currentGrid.
-	 * return currentGrid
-	 */ }
+/*
+ * joins squares when moved towards a square of the same value.
+ * will do so by iterating through the squares from bottom to top 
+ * (using relative coordinates provided by currentGrid), 
+ * if square above is the same, square*=2 and square above=0, 
+ * and write those new values into grid. 
+ * return grid
+ */
+int joinSquares (int currentGrid, int grid) { }
 
-int joinSquares (int currentGrid, int grid) {
-	/*
-	 * joins squares when moved towards a square of the same value.
-	 * will do so by iterating through the squares from bottom to top 
-	 * (using relative coordinates provided by currentGrid), 
-	 * if square above is the same, square*=2 and square above=0, 
-	 * and write those new values into grid. 
-	 * return grid
-	 */ }
+/*
+ * uses coordinates from currentGrid to get values from grid 
+ * and assign them to newGrid by taking corresponding coordinates from relativeGrid.
+ * returns newGrid
+ */
+int updateGrid (int currentGrid, int grid, int relativeGrid) { }
 
-int updateGrid (int currentGrid, int grid, int relativeGrid) {
-	/*
-	 * uses coordinates from currentGrid to get values from grid 
-	 * and assign them to newGrid by taking corresponding coordinates from relativeGrid.
-	 * returns newGrid
-	 */ }
-
-bool gameOver (int grid) {
-	/*
-	 * if empty squares in grid, return false.
-	 * if any 2 adjacent squares in grid are the same, return false.
-	 * return true 
-	 */ }
+/*
+ * if empty squares in grid, return false.
+ * if any 2 adjacent squares in grid are the same, return false.
+ * return true 
+ */
+bool gameOver (int grid) { }
