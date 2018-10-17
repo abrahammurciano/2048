@@ -1,21 +1,32 @@
 #include <iostream>
 #include <vector>
+#include <ctime>
 using namespace std;
-
-vector< vector < vector <int> > > rotate (int times, int gridSize);
-int populate (int grid);
-void display (int grid);
-int move (int relativeGrid);
-int joinSquares (int currentGrid, int grid);
-int updateGrid (int currentGrid, int grid, int relativeGrid);
-bool gameOver (int grid);
 
 typedef vector<int> int1D;
 typedef vector<int1D> int2D;
 typedef vector<int2D> int3D;
 typedef vector<int3D> int4D;
 
+int2D populate (int2D grid, int gridSize);
+void display (int grid);
+int move (int relativeGrid);
+int joinSquares (int currentGrid, int grid);
+int updateGrid (int currentGrid, int grid, int relativeGrid);
+bool gameOver (int grid);
+
+// Function purely for testing purposes during production
+void printGrid (int2D grid, int gridSize) {
+	for (int x = 0; x < gridSize; x++) {
+		for (int y = 0; y < gridSize; y++) {
+			cout << grid[x][y] << " ";
+		}
+		cout << endl;
+	}
+}
+
 int main () {
+	srand(time(0));
 
 	//	Ask for grid size gridSize
 	int gridSize;
@@ -46,17 +57,17 @@ int main () {
 		for (int x = 0; x < gridSize; x++) {
 			for (int y = 0; y < gridSize; y++) {
 				if (r == 0) {
-					cout << (relativeGrid[r][x][y][0] = x);
-					cout << (relativeGrid[r][x][y][1] = y);
+					relativeGrid[r][x][y][0] = x;
+					relativeGrid[r][x][y][1] = y;
 				} else {
-					cout << (relativeGrid[r][x][y][0] = relativeGrid[r-1][x][y][1]);
-					cout << (relativeGrid[r][x][y][1] = gridSize - 1 - relativeGrid[r-1][x][y][0]);
+					relativeGrid[r][x][y][0] = relativeGrid[r - 1][x][y][1];
+					relativeGrid[r][x][y][1] = gridSize - 1 - relativeGrid[r - 1][x][y][0];
 				}
 			}
-			cout << endl;
 		}
 	}
-
+	
+	grid = populate(grid, gridSize);
 
 	return 0;
 }
@@ -64,7 +75,30 @@ int main () {
 /*
  * stick some new squares into grid (according to rules of the game). returns grid
  */
-int populate (int grid) { }
+int2D populate (int2D grid, int gridSize) {
+	int2D emptySquares;
+	for (int x = 0; x < gridSize; x++) {
+		for (int y = 0; y < gridSize; y++) {
+			int value = grid[x][y];
+			if (value == 0) {
+				int1D coordinates;
+				coordinates.push_back(x);
+				coordinates.push_back(y);
+				emptySquares.push_back(coordinates);
+			}
+		}
+	}
+	int randomSquare = rand() % emptySquares.size();
+	int value = 2;
+	int rand0to9 = rand() % 10;
+	if (rand0to9 % 10 == 9) {
+		value = 4;
+	}
+	int x = emptySquares[randomSquare][0];
+	int y = emptySquares[randomSquare][1];
+	grid[x][y] = value;
+	return grid;
+}
 
 /*
  * Output the grid onto the terminal
