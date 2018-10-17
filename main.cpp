@@ -30,7 +30,7 @@ int main () {
 		cin >> gridSize;
 	}
 
-	//	Define grid as mutidimensional array with the size from gridSize where the first level of the 
+	//	Define grid as mutidimentional array with the size from gridSize where the first level of the 
 	//	array will have the columns of the grid, and the second level will have rows. So for example, 
 	//	grid[0][2] will refer to the square which is in the 3rd column from the left and the first row 
 	//	from the bottom, and the value will be the number that should be in that square.
@@ -43,21 +43,14 @@ int main () {
 	//	manipulate the grid in the same way, no matter which direction the user wants to click
 	int4D relativeGrid(4, int3D(gridSize, int2D(gridSize, int1D(2, 0))));
 	for (int r = 0; r < 4; r++) {
-		cout << "Rotation " << r << ":" << endl;
 		for (int x = 0; x < gridSize; x++) {
 			for (int y = 0; y < gridSize; y++) {
 				if (r == 0) {
-					cout << "(";
 					cout << (relativeGrid[r][x][y][0] = x);
-					cout << ",";
 					cout << (relativeGrid[r][x][y][1] = y);
-					cout << ") ";
 				} else {
-					cout << "(";
 					cout << (relativeGrid[r][x][y][0] = relativeGrid[r-1][x][y][1]);
-					cout << ",";
 					cout << (relativeGrid[r][x][y][1] = gridSize - 1 - relativeGrid[r-1][x][y][0]);
-					cout << ") ";
 				}
 			}
 			cout << endl;
