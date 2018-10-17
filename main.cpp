@@ -16,6 +16,7 @@ int updateGrid (int currentGrid, int grid, int relativeGrid);
 bool gameOver (int grid);
 
 // Function purely for testing purposes during production
+
 void printGrid (int2D grid, int gridSize) {
 	for (int x = 0; x < gridSize; x++) {
 		for (int y = 0; y < gridSize; y++) {
@@ -66,8 +67,12 @@ int main () {
 			}
 		}
 	}
-	
+
 	grid = populate(grid, gridSize);
+	while (true) {
+		//	every move is a new iteration of this loop.
+		//	continue this loop until player has lost.
+	}
 
 	return 0;
 }
