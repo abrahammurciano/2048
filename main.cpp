@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <cmath>
 using namespace std;
 
 typedef vector<int> int1D;
@@ -9,11 +10,11 @@ typedef vector<int2D> int3D;
 typedef vector<int3D> int4D;
 
 int2D populate (int2D grid, int gridSize);
-void display (int grid);
-int move (int relativeGrid);
-int joinSquares (int currentGrid, int grid);
-int updateGrid (int currentGrid, int grid, int relativeGrid);
-bool gameOver (int grid);
+void display (int2D grid, int gridSize);
+int move (int4D relativeGrid);
+int joinSquares (int currentGrid, int2D grid);
+int updateGrid (int currentGrid, int2D grid, int4D relativeGrid);
+bool gameOver (int2D grid);
 
 // Function purely for testing purposes during production
 
@@ -69,10 +70,11 @@ int main () {
 	}
 
 	grid = populate(grid, gridSize);
-	while (true) {
-		//	every move is a new iteration of this loop.
-		//	continue this loop until player has lost.
-	}
+	//while (true) {
+	//	every move is a new iteration of this loop.
+	//	continue this loop until player has lost.
+	display(grid, gridSize);
+	//}
 
 	return 0;
 }
@@ -94,9 +96,11 @@ int2D populate (int2D grid, int gridSize) {
 		}
 	}
 	int randomSquare = rand() % emptySquares.size();
-	int value = 2;
 	int rand0to9 = rand() % 10;
-	if (rand0to9 % 10 == 9) {
+	int value;
+	if (rand0to9 % 10 != 9) {
+		value = 2;
+	} else {
 		value = 4;
 	}
 	int x = emptySquares[randomSquare][0];
@@ -110,7 +114,39 @@ int2D populate (int2D grid, int gridSize) {
  * (Possibly can detect size of terminal and acomodate the grid accordingly)
  * (Possibly use colours)
  */
-void display (int grid) { }
+void display (int2D grid, int gridSize) {
+	for (int i = 0; i < gridSize; i++) {
+		cout << ".______";
+	}
+	cout << "." << endl;
+	for (int x = 0; x < gridSize; x++) {
+		for (int i = 0; i < gridSize; i++) {
+			cout << "|      ";
+		}
+		cout << "|" << endl;
+		for (int y = 0; y < gridSize; y++) {
+			//	Get number of digits in value
+			int value = grid[x][y];
+			int length = 1;
+			for (int i = 1; value/(int)(pow(10, i)) != 0; i++) {
+				length = i + 1;
+			}
+			cout << "|";
+			for (int i = 0; i < (6-length)/2 + length%2; i++) {
+				cout << " ";
+			}
+			cout << value;
+			for (int i = 0; i < (6-length)/2; i++) {
+				cout << " ";
+			}
+		}
+		cout << "|" << endl;
+		for (int i = 0; i < gridSize; i++) {
+			cout << "|______";
+		}
+		cout << "|" << endl;
+	}
+}
 
 /*
  * moves all squares as far as it can in the direction direction.
@@ -119,7 +155,7 @@ void display (int grid) { }
  * in currentGrid.
  * return currentGrid
  */
-int move (int relativeGrid) { }
+int move (int4D relativeGrid) { }
 
 /*
  * joins squares when moved towards a square of the same value.
@@ -129,18 +165,18 @@ int move (int relativeGrid) { }
  * and write those new values into grid. 
  * return grid
  */
-int joinSquares (int currentGrid, int grid) { }
+int joinSquares (int currentGrid, int2D grid) { }
 
 /*
  * uses coordinates from currentGrid to get values from grid 
  * and assign them to newGrid by taking corresponding coordinates from relativeGrid.
  * returns newGrid
  */
-int updateGrid (int currentGrid, int grid, int relativeGrid) { }
+int updateGrid (int currentGrid, int2D grid, int4D relativeGrid) { }
 
 /*
  * if empty squares in grid, return false.
  * if any 2 adjacent squares in grid are the same, return false.
  * return true 
  */
-bool gameOver (int grid) { }
+bool gameOver (int2D grid) { }
