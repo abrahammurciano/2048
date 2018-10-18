@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <cmath>
 using namespace std;
 
 typedef vector<int> int1D;
@@ -95,9 +96,11 @@ int2D populate (int2D grid, int gridSize) {
 		}
 	}
 	int randomSquare = rand() % emptySquares.size();
-	int value = 2;
 	int rand0to9 = rand() % 10;
-	if (rand0to9 % 10 == 9) {
+	int value;
+	if (rand0to9 % 10 != 9) {
+		value = 2;
+	} else {
 		value = 4;
 	}
 	int x = emptySquares[randomSquare][0];
@@ -112,13 +115,36 @@ int2D populate (int2D grid, int gridSize) {
  * (Possibly use colours)
  */
 void display (int2D grid, int gridSize) {
-	cout << " ______ ______ ______ ______ " << endl;
+	for (int i = 0; i < gridSize; i++) {
+		cout << ".______";
+	}
+	cout << "." << endl;
 	for (int x = 0; x < gridSize; x++) {
-		for (int y = 0; y < gridSize; y++) {
+		for (int i = 0; i < gridSize; i++) {
 			cout << "|      ";
 		}
 		cout << "|" << endl;
-		cout << "|______|______|______|______|" << endl;
+		for (int y = 0; y < gridSize; y++) {
+			//	Get number of digits in value
+			int value = grid[x][y];
+			int length = 1;
+			for (int i = 1; value/(int)(pow(10, i)) != 0; i++) {
+				length = i + 1;
+			}
+			cout << "|";
+			for (int i = 0; i < (6-length)/2 + length%2; i++) {
+				cout << " ";
+			}
+			cout << value;
+			for (int i = 0; i < (6-length)/2; i++) {
+				cout << " ";
+			}
+		}
+		cout << "|" << endl;
+		for (int i = 0; i < gridSize; i++) {
+			cout << "|______";
+		}
+		cout << "|" << endl;
 	}
 }
 
