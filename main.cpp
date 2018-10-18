@@ -11,10 +11,10 @@ typedef vector<int3D> int4D;
 
 int2D populate (int2D grid, int gridSize);
 void display (int2D grid, int gridSize);
+bool gameOver (int2D grid, int gridSize);
 int move (int4D relativeGrid);
 int joinSquares (int currentGrid, int2D grid);
 int updateGrid (int currentGrid, int2D grid, int4D relativeGrid);
-bool gameOver (int2D grid);
 
 // Function purely for testing purposes during production
 
@@ -70,11 +70,15 @@ int main () {
 	}
 
 	grid = populate(grid, gridSize);
-	//while (true) {
+	//	while (true) {
 	//	every move is a new iteration of this loop.
 	//	continue this loop until player has lost.
+	grid = populate(grid, gridSize);
 	display(grid, gridSize);
-	//}
+	if (gameOver(grid, gridSize)) {
+		//	break;
+	}
+	//	}
 
 	return 0;
 }
@@ -95,17 +99,20 @@ int2D populate (int2D grid, int gridSize) {
 			}
 		}
 	}
-	int randomSquare = rand() % emptySquares.size();
-	int rand0to9 = rand() % 10;
-	int value;
-	if (rand0to9 % 10 != 9) {
-		value = 2;
-	} else {
-		value = 4;
+	int noOfEmptySquares = emptySquares.size();
+	if (noOfEmptySquares) {
+		int randomSquare = rand() % noOfEmptySquares;
+		int rand0to9 = rand() % 10;
+		int value;
+		if (rand0to9 % 10 != 9) {
+			value = 2;
+		} else {
+			value = 4;
+		}
+		int x = emptySquares[randomSquare][0];
+		int y = emptySquares[randomSquare][1];
+		grid[x][y] = value;
 	}
-	int x = emptySquares[randomSquare][0];
-	int y = emptySquares[randomSquare][1];
-	grid[x][y] = value;
 	return grid;
 }
 
@@ -128,15 +135,15 @@ void display (int2D grid, int gridSize) {
 			//	Get number of digits in value
 			int value = grid[x][y];
 			int length = 1;
-			for (int i = 1; value/(int)(pow(10, i)) != 0; i++) {
+			for (int i = 1; value / (int) (pow(10, i)) != 0; i++) {
 				length = i + 1;
 			}
 			cout << "|";
-			for (int i = 0; i < (6-length)/2 + length%2; i++) {
+			for (int i = 0; i < (6 - length) / 2 + length % 2; i++) {
 				cout << " ";
 			}
 			cout << value;
-			for (int i = 0; i < (6-length)/2; i++) {
+			for (int i = 0; i < (6 - length) / 2; i++) {
 				cout << " ";
 			}
 		}
@@ -145,6 +152,28 @@ void display (int2D grid, int gridSize) {
 			cout << "|______";
 		}
 		cout << "|" << endl;
+	}
+}
+
+/*
+ * if empty squares in grid, return false.
+ * if any 2 adjacent squares in grid are the same, return false.
+ * return true 
+ */
+bool gameOver (int2D grid, int gridSize) {
+	for (int x = 0; x < gridSize; x++) {
+		for (int y = 0; y < gridSize; y++) {
+			if (!grid[x][y]) {
+				return false;
+			}
+		}
+	}
+	for (int x = 0; x < gridSize; x++) {
+		for (int y = 0; y < gridSize; y++) {
+			if (grid[x][y] == grid[x + 1][y] || grid[x][y] == grid[x][y + 1]) {
+				return false;
+			}
+		}
 	}
 }
 
@@ -173,10 +202,3 @@ int joinSquares (int currentGrid, int2D grid) { }
  * returns newGrid
  */
 int updateGrid (int currentGrid, int2D grid, int4D relativeGrid) { }
-
-/*
- * if empty squares in grid, return false.
- * if any 2 adjacent squares in grid are the same, return false.
- * return true 
- */
-bool gameOver (int2D grid) { }
