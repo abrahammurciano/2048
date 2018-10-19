@@ -12,6 +12,7 @@ typedef vector<int3D> int4D;
 int2D populate (int2D grid, int gridSize);
 void display (int2D grid, int gridSize);
 bool gameOver (int2D grid, int gridSize);
+int keyPress ();
 int move (int4D relativeGrid);
 int joinSquares (int currentGrid, int2D grid);
 int updateGrid (int currentGrid, int2D grid, int4D relativeGrid);
@@ -21,7 +22,7 @@ int updateGrid (int currentGrid, int2D grid, int4D relativeGrid);
 void printGrid (int2D grid, int gridSize) {
 	for (int x = 0; x < gridSize; x++) {
 		for (int y = 0; y < gridSize; y++) {
-			cout << grid[x][y] << " ";
+			cout << grid[x][y] << ' ';
 		}
 		cout << endl;
 	}
@@ -78,6 +79,7 @@ int main () {
 	if (gameOver(grid, gridSize)) {
 		//	break;
 	}
+	int direction = keyPress();
 	//	}
 
 	return 0;
@@ -125,12 +127,12 @@ void display (int2D grid, int gridSize) {
 	for (int i = 0; i < gridSize; i++) {
 		cout << ".______";
 	}
-	cout << "." << endl;
+	cout << '.' << endl;
 	for (int x = 0; x < gridSize; x++) {
 		for (int i = 0; i < gridSize; i++) {
 			cout << "|      ";
 		}
-		cout << "|" << endl;
+		cout << '|' << endl;
 		for (int y = 0; y < gridSize; y++) {
 			//	Get number of digits in value
 			int value = grid[x][y];
@@ -138,20 +140,20 @@ void display (int2D grid, int gridSize) {
 			for (int i = 1; value / (int) (pow(10, i)) != 0; i++) {
 				length = i + 1;
 			}
-			cout << "|";
+			cout << '|';
 			for (int i = 0; i < (6 - length) / 2 + length % 2; i++) {
-				cout << " ";
+				cout << ' ';
 			}
 			cout << value;
 			for (int i = 0; i < (6 - length) / 2; i++) {
-				cout << " ";
+				cout << ' ';
 			}
 		}
-		cout << "|" << endl;
+		cout << '|' << endl;
 		for (int i = 0; i < gridSize; i++) {
 			cout << "|______";
 		}
-		cout << "|" << endl;
+		cout << '|' << endl;
 	}
 }
 
@@ -175,6 +177,26 @@ bool gameOver (int2D grid, int gridSize) {
 			}
 		}
 	}
+	return true;
+}
+
+int keyPress () {
+	int direction;
+	char key;
+	do {
+		cin >> key;
+	} while (key != 's' && key != 'a' && key != 'd' && key != 'w');
+	if (key == 's') {
+		direction = 0;
+	} else if (key == 'a') {
+		direction = 1;
+	} else if (key == 'd') {
+		direction = 3;
+	} else if (key == 'w') {
+		direction = 2;
+	}
+
+	return direction;
 }
 
 /*
@@ -184,7 +206,9 @@ bool gameOver (int2D grid, int gridSize) {
  * in currentGrid.
  * return currentGrid
  */
-int move (int4D relativeGrid) { }
+int move (int4D relativeGrid) {
+	return 0;
+}
 
 /*
  * joins squares when moved towards a square of the same value.
@@ -194,11 +218,15 @@ int move (int4D relativeGrid) { }
  * and write those new values into grid. 
  * return grid
  */
-int joinSquares (int currentGrid, int2D grid) { }
+int joinSquares (int currentGrid, int2D grid) {
+	return 0;
+}
 
 /*
  * uses coordinates from currentGrid to get values from grid 
  * and assign them to newGrid by taking corresponding coordinates from relativeGrid.
  * returns newGrid
  */
-int updateGrid (int currentGrid, int2D grid, int4D relativeGrid) { }
+int updateGrid (int currentGrid, int2D grid, int4D relativeGrid) {
+	return 0;
+}
