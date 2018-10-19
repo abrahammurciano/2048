@@ -13,7 +13,7 @@ int2D populate (int2D grid, int gridSize);
 void display (int2D grid, int gridSize);
 bool gameOver (int2D grid, int gridSize);
 int keyPress ();
-int move (int4D relativeGrid);
+int3D move (int3D relativeGrid, int2D grid, int gridSize);
 int joinSquares (int currentGrid, int2D grid);
 int updateGrid (int currentGrid, int2D grid, int4D relativeGrid);
 
@@ -80,6 +80,8 @@ int main () {
 		//	break;
 	}
 	int direction = keyPress();
+	int3D currentGrid = move(relativeGrid[direction], grid, gridSize);
+	
 	//	}
 
 	return 0;
@@ -180,6 +182,10 @@ bool gameOver (int2D grid, int gridSize) {
 	return true;
 }
 
+/*
+ * Awaits for key input. At the moment uses WASD and requires Enter after each input.
+ * TODO: change input method to use arrows w/o enter
+ */
 int keyPress () {
 	int direction;
 	char key;
@@ -206,8 +212,29 @@ int keyPress () {
  * in currentGrid.
  * return currentGrid
  */
-int move (int4D relativeGrid) {
-	return 0;
+int3D move (int3D relativeGrid, int2D grid, int gridSize) {
+	int3D currentGrid;
+//	for (int x = 0; x < gridSize; x++) {
+//		for (int y = 0; y < gridSize; y++) {
+//			int xCoord = relativeGrid[x][y][0];
+//			int yCoord = relativeGrid[x][y][1];
+//			int value = grid[xCoord][yCoord];
+//			if (value != 0) {
+//				int lowestEmpty = y;
+//				for (int i = 0; i < y; i++) {
+//					int yCoordOther = relativeGrid[x][i][1];
+//					int value = grid[xCoord][yCoordOther];
+//					if (value == 0) {
+//						lowestEmpty = i;
+//					}
+//				}
+//				currentGrid[x][lowestEmpty] = relativeGrid[x][y];
+//				currentGrid[x][y] = relativeGrid[x][lowestEmpty];
+//			}
+//		}
+//	}
+
+	return currentGrid;
 }
 
 /*
