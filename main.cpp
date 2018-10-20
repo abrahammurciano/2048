@@ -13,7 +13,7 @@ int2D populate (int2D grid, int gridSize);
 void display (int2D grid, int gridSize);
 bool gameOver (int2D grid, int gridSize);
 int keyPress ();
-int3D move (int3D relativeGrid, int2D grid, int gridSize);
+int2D move (int3D relativeGrid, int2D grid, int gridSize);
 int joinSquares (int currentGrid, int2D grid);
 int updateGrid (int currentGrid, int2D grid, int4D relativeGrid);
 
@@ -71,18 +71,18 @@ int main () {
 	}
 
 	grid = populate(grid, gridSize);
-	//	while (true) {
-	//	every move is a new iteration of this loop.
-	//	continue this loop until player has lost.
-	grid = populate(grid, gridSize);
-	display(grid, gridSize);
-	if (gameOver(grid, gridSize)) {
-		//	break;
+	while (true) {
+		//	every move is a new iteration of this loop.
+		//	continue this loop until player has lost.
+		grid = populate(grid, gridSize);
+		display(grid, gridSize);
+		if (gameOver(grid, gridSize)) {
+			//	break;
+		}
+		int direction = keyPress();
+		grid = move(relativeGrid[direction], grid, gridSize);
+
 	}
-	int direction = keyPress();
-	int3D currentGrid = move(relativeGrid[direction], grid, gridSize);
-	
-	//	}
 
 	return 0;
 }
@@ -212,29 +212,25 @@ int keyPress () {
  * in currentGrid.
  * return currentGrid
  */
-int3D move (int3D relativeGrid, int2D grid, int gridSize) {
-	int3D currentGrid;
-//	for (int x = 0; x < gridSize; x++) {
-//		for (int y = 0; y < gridSize; y++) {
-//			int xCoord = relativeGrid[x][y][0];
-//			int yCoord = relativeGrid[x][y][1];
-//			int value = grid[xCoord][yCoord];
-//			if (value != 0) {
-//				int lowestEmpty = y;
-//				for (int i = 0; i < y; i++) {
-//					int yCoordOther = relativeGrid[x][i][1];
-//					int value = grid[xCoord][yCoordOther];
-//					if (value == 0) {
-//						lowestEmpty = i;
-//					}
-//				}
-//				currentGrid[x][lowestEmpty] = relativeGrid[x][y];
-//				currentGrid[x][y] = relativeGrid[x][lowestEmpty];
-//			}
-//		}
-//	}
+int2D move (int3D relativeGrid, int2D grid, int gridSize) {
+	for (int x = 0; x < gridSize; x++) {
+		int lowestEmpty = -1;
+		for (int y = 0; y < gridSize; y++) {
+			int xGrid = relativeGrid[x][y][0];
+			int yGrid = relativeGrid[x][y][1];
+			if (grid[xGrid][yGrid]) {
+				if (lowestEmpty != -1) {
+					grid[xGrid][lowestEmpty] = grid[xGrid][yGrid];
+					grid[xGrid][yGrid] = 0;
+					lowestEmpty++;
+				}
+			} else if (lowestEmpty == -1) {
+				lowestEmpty++;
+			}
+		}
+	}
 
-	return currentGrid;
+	return grid;
 }
 
 /*
