@@ -1,3 +1,5 @@
 flowchart/* linguist-vendored
+nbproject/* linguist-vendored
 SDL2/* linguist-vendored
 Makefile linguist-vendored
+.dep.inc linguist-vendored
