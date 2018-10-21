@@ -225,7 +225,7 @@ int2D move (int3D relativeGrid, int2D grid, int gridSize) {
 					lowestEmpty++;
 				}
 			} else if (lowestEmpty == -1) {
-				lowestEmpty++;
+				lowestEmpty = y;
 			}
 		}
 	}
