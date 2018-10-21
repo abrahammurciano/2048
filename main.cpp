@@ -17,17 +17,6 @@ int2D move(int3D relativeGrid, int2D grid, int gridSize);
 int joinSquares(int currentGrid, int2D grid);
 int updateGrid(int currentGrid, int2D grid, int4D relativeGrid);
 
-// Function purely for testing purposes during production
-
-void printGrid(int2D grid, int gridSize) {
-	for (int x = 0; x < gridSize; x++) {
-		for (int y = 0; y < gridSize; y++) {
-			cout << grid[x][y] << ' ';
-		}
-		cout << endl;
-	}
-}
-
 int main() {
 	srand(time(0));
 
