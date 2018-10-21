@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "g++ -g main.cpp -o 2048",
+            "command": "g++ -g main.cpp -o main",
             "group": {
                 "kind": "build",
                 "isDefault": true
