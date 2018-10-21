@@ -218,7 +218,9 @@ int2D move(int3D relativeGrid, int2D grid, int gridSize) {
 			int yGrid = relativeGrid[x][y][1];
 			if (grid[xGrid][yGrid]) {
 				if (lowestEmpty != -1) {
-					grid[xGrid][lowestEmpty] = grid[xGrid][yGrid];
+					int newXGrid = relativeGrid[x][lowestEmpty][0];
+					int newYGrid = relativeGrid[x][lowestEmpty][1];
+					grid[newXGrid][newYGrid] = grid[xGrid][yGrid];
 					grid[xGrid][yGrid] = 0;
 					lowestEmpty++;
 				}
