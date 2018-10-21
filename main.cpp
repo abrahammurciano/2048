@@ -9,17 +9,17 @@ typedef vector<int1D> int2D;
 typedef vector<int2D> int3D;
 typedef vector<int3D> int4D;
 
-int2D populate (int2D grid, int gridSize);
-void display (int2D grid, int gridSize);
-bool gameOver (int2D grid, int gridSize);
-int keyPress ();
-int2D move (int3D relativeGrid, int2D grid, int gridSize);
-int joinSquares (int currentGrid, int2D grid);
-int updateGrid (int currentGrid, int2D grid, int4D relativeGrid);
+int2D populate(int2D grid, int gridSize);
+void display(int2D grid, int gridSize);
+bool gameOver(int2D grid, int gridSize);
+int keyPress();
+int2D move(int3D relativeGrid, int2D grid, int gridSize);
+int joinSquares(int currentGrid, int2D grid);
+int updateGrid(int currentGrid, int2D grid, int4D relativeGrid);
 
 // Function purely for testing purposes during production
 
-void printGrid (int2D grid, int gridSize) {
+void printGrid(int2D grid, int gridSize) {
 	for (int x = 0; x < gridSize; x++) {
 		for (int y = 0; y < gridSize; y++) {
 			cout << grid[x][y] << ' ';
@@ -28,7 +28,7 @@ void printGrid (int2D grid, int gridSize) {
 	}
 }
 
-int main () {
+int main() {
 	srand(time(0));
 
 	//	Ask for grid size gridSize
@@ -44,17 +44,21 @@ int main () {
 		cin >> gridSize;
 	}
 
-	//	Define grid as mutidimentional array with the size from gridSize where the first level of the 
-	//	array will have the columns of the grid, and the second level will have rows. So for example, 
-	//	grid[0][2] will refer to the square which is in the 3rd column from the left and the first row 
-	//	from the bottom, and the value will be the number that should be in that square.
+	//	Define grid as mutidimentional array with the size from gridSize where
+	// the first level of the 	array will have the columns of the grid, and the
+	// second level will have rows. So for example, 	grid[0][2] will refer to
+	// the square which is in the 3rd column from the left and the first row
+	// from the bottom, and the value will be the number that should be in that
+	// square.
 	int2D grid(gridSize, int1D(gridSize, 0));
 
-	//	Define relativeGrid as an array with 4 elements. Each element will contain a multidimensional
-	//	array similar to grid just that instead of containing the number that goes in each square, it 
-	//	will contain another array with the coordinates to get the actual value from grid, just as if 
-	//	the relativeGrid was rotated r times clockwise. The purpose of this variable is to be able to 
-	//	manipulate the grid in the same way, no matter which direction the user wants to click
+	//	Define relativeGrid as an array with 4 elements. Each element will
+	// contain a multidimensional 	array similar to grid just that instead
+	// of containing the number that goes in each square, it 	will contain
+	// another array with the coordinates to get the actual value from grid, just
+	// as if 	the relativeGrid was rotated r times clockwise. The purpose of
+	// this variable is to be able to 	manipulate the grid in the same way, no
+	// matter which direction the user wants to click
 	int4D relativeGrid(4, int3D(gridSize, int2D(gridSize, int1D(2, 0))));
 	for (int r = 0; r < 4; r++) {
 		for (int x = 0; x < gridSize; x++) {
@@ -81,16 +85,16 @@ int main () {
 		}
 		int direction = keyPress();
 		grid = move(relativeGrid[direction], grid, gridSize);
-
 	}
 
 	return 0;
 }
 
 /*
- * stick some new squares into grid (according to rules of the game). returns grid
+ * stick some new squares into grid (according to rules of the game). returns
+ * grid
  */
-int2D populate (int2D grid, int gridSize) {
+int2D populate(int2D grid, int gridSize) {
 	int2D emptySquares;
 	for (int x = 0; x < gridSize; x++) {
 		for (int y = 0; y < gridSize; y++) {
@@ -125,11 +129,12 @@ int2D populate (int2D grid, int gridSize) {
  * (Possibly can detect size of terminal and acomodate the grid accordingly)
  * (Possibly use colours)
  */
-void display (int2D grid, int gridSize) {
-	for (int i = 0; i < gridSize; i++) {
-		cout << ".______";
+void display(int2D grid, int gridSize) {
+	cout << " ______";
+	for (int i = 1; i < gridSize; i++) {
+		cout << "_______";
 	}
-	cout << '.' << endl;
+	cout << endl;
 	for (int x = 0; x < gridSize; x++) {
 		for (int i = 0; i < gridSize; i++) {
 			cout << "|      ";
@@ -137,16 +142,20 @@ void display (int2D grid, int gridSize) {
 		cout << '|' << endl;
 		for (int y = 0; y < gridSize; y++) {
 			//	Get number of digits in value
-			int value = grid[x][y];
+			int value = grid[y][gridSize - 1 - x];
 			int length = 1;
-			for (int i = 1; value / (int) (pow(10, i)) != 0; i++) {
+			for (int i = 1; value / (int)(pow(10, i)) != 0; i++) {
 				length = i + 1;
 			}
 			cout << '|';
 			for (int i = 0; i < (6 - length) / 2 + length % 2; i++) {
 				cout << ' ';
 			}
-			cout << value;
+			if (value) {
+				cout << value;
+			} else {
+				cout << ' ';
+			}
 			for (int i = 0; i < (6 - length) / 2; i++) {
 				cout << ' ';
 			}
@@ -162,9 +171,9 @@ void display (int2D grid, int gridSize) {
 /*
  * if empty squares in grid, return false.
  * if any 2 adjacent squares in grid are the same, return false.
- * return true 
+ * return true
  */
-bool gameOver (int2D grid, int gridSize) {
+bool gameOver(int2D grid, int gridSize) {
 	for (int x = 0; x < gridSize; x++) {
 		for (int y = 0; y < gridSize; y++) {
 			if (!grid[x][y]) {
@@ -183,10 +192,11 @@ bool gameOver (int2D grid, int gridSize) {
 }
 
 /*
- * Awaits for key input. At the moment uses WASD and requires Enter after each input.
+ * Awaits for key input. At the moment uses WASD and requires Enter after each
+ * input.
  * TODO: change input method to use arrows w/o enter
  */
-int keyPress () {
+int keyPress() {
 	int direction;
 	char key;
 	do {
@@ -207,12 +217,11 @@ int keyPress () {
 
 /*
  * moves all squares as far as it can in the direction direction.
- * Will do so by swapping the coordinates of every non-zero square in relativeGrid
- * (starting from bottom) with that of the lowest zero square below it and storing that 
- * in currentGrid.
- * return currentGrid
+ * Will do so by swapping the coordinates of every non-zero square in
+ * relativeGrid (starting from bottom) with that of the lowest zero square below
+ * it and storing that in currentGrid. return currentGrid
  */
-int2D move (int3D relativeGrid, int2D grid, int gridSize) {
+int2D move(int3D relativeGrid, int2D grid, int gridSize) {
 	for (int x = 0; x < gridSize; x++) {
 		int lowestEmpty = -1;
 		for (int y = 0; y < gridSize; y++) {
@@ -235,21 +244,21 @@ int2D move (int3D relativeGrid, int2D grid, int gridSize) {
 
 /*
  * joins squares when moved towards a square of the same value.
- * will do so by iterating through the squares from bottom to top 
- * (using relative coordinates provided by currentGrid), 
- * if square above is the same, square*=2 and square above=0, 
- * and write those new values into grid. 
+ * will do so by iterating through the squares from bottom to top
+ * (using relative coordinates provided by currentGrid),
+ * if square above is the same, square*=2 and square above=0,
+ * and write those new values into grid.
  * return grid
  */
-int joinSquares (int currentGrid, int2D grid) {
+int joinSquares(int currentGrid, int2D grid) {
 	return 0;
 }
 
 /*
- * uses coordinates from currentGrid to get values from grid 
- * and assign them to newGrid by taking corresponding coordinates from relativeGrid.
- * returns newGrid
+ * uses coordinates from currentGrid to get values from grid
+ * and assign them to newGrid by taking corresponding coordinates from
+ * relativeGrid. returns newGrid
  */
-int updateGrid (int currentGrid, int2D grid, int4D relativeGrid) {
+int updateGrid(int currentGrid, int2D grid, int4D relativeGrid) {
 	return 0;
 }
