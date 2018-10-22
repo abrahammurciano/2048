@@ -16,19 +16,23 @@ int keyPress();
 int2D move(int3D relativeGrid, int2D grid, int gridSize);
 int2D joinSquares(int3D relativeGrid, int2D grid, int gridSize);
 
+int moves, score;
+
 int main() {
 	srand(time(0));
 
 	//	Ask for grid size gridSize
 	int gridSize;
-	int const limit = 10;
+	int const max = 10;
+	int const min = 2;
+	system("clear||CLR");
 	cout << "Enter a grid size:" << endl;
 	cout << "Example: For a 4x4 grid, type \"4\"" << endl;
 	cin >> gridSize;
 
-	//	Is gridSize more than 1 (and less than limit)?
-	while (gridSize < 2 || gridSize > limit) {
-		cout << "Size must be between 2 and " << limit << endl;
+	//	Is gridSize more than 1 (and less than max)?
+	while (gridSize < min || gridSize > max) {
+		cout << "Size must be between " << min << " and " << max << endl;
 		cin >> gridSize;
 	}
 
@@ -75,6 +79,7 @@ int main() {
 		grid = move(relativeGrid[direction], grid, gridSize);
 		grid = joinSquares(relativeGrid[direction], grid, gridSize);
 		grid = move(relativeGrid[direction], grid, gridSize);
+		moves++;
 	}
 
 	return 0;
@@ -120,6 +125,16 @@ int2D populate(int2D grid, int gridSize) {
  * (Possibly use colours)
  */
 void display(int2D grid, int gridSize) {
+	// Clear Screen
+	system("clear||CLR");
+
+	// Print Stats
+	cout << string(29, '-') << endl;
+	cout << "Moves: " << moves << endl;
+	cout << "Score: " << score << endl;
+	cout << string(29, '-') << endl;
+	
+	// Print Grid
 	cout << " ______";
 	for (int i = 1; i < gridSize; i++) {
 		cout << "_______";
@@ -251,7 +266,7 @@ int2D joinSquares(int3D relativeGrid, int2D grid, int gridSize) {
 				int topX = relativeGrid[x][y+1][0];
 				int topY = relativeGrid[x][y+1][1];
 				if (grid[bottomX][bottomY] == grid[topX][topY]) {
-					grid[bottomX][bottomY] *= 2;
+					score += (grid[bottomX][bottomY] *= 2);
 					grid[topX][topY] = 0;
 				}
 			}
