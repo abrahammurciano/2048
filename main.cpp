@@ -73,7 +73,7 @@ int main() {
 		grid = populate(grid, gridSize);
 		display(grid, gridSize);
 		if (gameOver(grid, gridSize)) {
-			//	break;
+			break;
 		}
 		int direction = keyPress();
 		grid = move(relativeGrid[direction], grid, gridSize);
@@ -179,6 +179,7 @@ void display(int2D grid, int gridSize) {
  * return true
  */
 bool gameOver(int2D grid, int gridSize) {
+	// Check if there's an empty square
 	for (int x = 0; x < gridSize; x++) {
 		for (int y = 0; y < gridSize; y++) {
 			if (!grid[x][y]) {
@@ -186,11 +187,20 @@ bool gameOver(int2D grid, int gridSize) {
 			}
 		}
 	}
-	for (int x = 0; x < gridSize; x++) {
-		for (int y = 0; y < gridSize; y++) {
+
+	// Check if there are any possible joins
+	for (int x = 0; x < gridSize - 1; x++) {
+		for (int y = 0; y < gridSize - 1; y++) {
 			if (grid[x][y] == grid[x + 1][y] || grid[x][y] == grid[x][y + 1]) {
 				return false;
 			}
+		}
+	}
+	// Check for possible joins on last row and column
+	int last = gridSize - 1;
+	for (int i = 0; i < last; i++) {
+		if (grid[i][last] == grid[i + 1][last] || grid[last][i] == grid[last][i + 1]){
+			return false;
 		}
 	}
 	return true;
