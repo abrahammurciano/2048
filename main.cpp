@@ -14,8 +14,7 @@ void display(int2D grid, int gridSize);
 bool gameOver(int2D grid, int gridSize);
 int keyPress();
 int2D move(int3D relativeGrid, int2D grid, int gridSize);
-int joinSquares(int currentGrid, int2D grid);
-int updateGrid(int currentGrid, int2D grid, int4D relativeGrid);
+int2D joinSquares(int3D relativeGrid, int2D grid, int gridSize);
 
 int main() {
 	srand(time(0));
@@ -73,6 +72,8 @@ int main() {
 			//	break;
 		}
 		int direction = keyPress();
+		grid = move(relativeGrid[direction], grid, gridSize);
+		grid = joinSquares(relativeGrid[direction], grid, gridSize);
 		grid = move(relativeGrid[direction], grid, gridSize);
 	}
 
@@ -241,15 +242,21 @@ int2D move(int3D relativeGrid, int2D grid, int gridSize) {
  * and write those new values into grid.
  * return grid
  */
-int joinSquares(int currentGrid, int2D grid) {
-	return 0;
-}
-
-/*
- * uses coordinates from currentGrid to get values from grid
- * and assign them to newGrid by taking corresponding coordinates from
- * relativeGrid. returns newGrid
- */
-int updateGrid(int currentGrid, int2D grid, int4D relativeGrid) {
-	return 0;
+int2D joinSquares(int3D relativeGrid, int2D grid, int gridSize) {
+	for(int x = 0; x < gridSize; x++) {
+		for (int y = 0; y < gridSize-1; y++) {
+			int bottomX = relativeGrid[x][y][0];
+			int bottomY = relativeGrid[x][y][1];
+			if (grid[bottomX][bottomY]) {
+				int topX = relativeGrid[x][y+1][0];
+				int topY = relativeGrid[x][y+1][1];
+				if (grid[bottomX][bottomY] == grid[topX][topY]) {
+					grid[bottomX][bottomY] *= 2;
+					grid[topX][topY] = 0;
+				}
+			}
+		}
+	}
+	
+	return grid;
 }
