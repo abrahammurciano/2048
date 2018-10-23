@@ -1,7 +1,7 @@
+#include <cmath>
+#include <ctime>
 #include <iostream>
 #include <vector>
-#include <ctime>
-#include <cmath>
 using namespace std;
 
 typedef vector<int> int1D;
@@ -20,12 +20,12 @@ int moves, score;
 
 int main() {
 	srand(time(0));
+	system("clear||CLR");
 
 	//	Ask for grid size gridSize
 	int gridSize;
 	int const max = 10;
 	int const min = 2;
-	system("clear||CLR");
 	cout << "Enter a grid size:" << endl;
 	cout << "Example: For a 4x4 grid, type \"4\"" << endl;
 	cin >> gridSize;
@@ -47,7 +47,8 @@ int main() {
 	//	Define relativeGrid as an array with 4 elements. Each element will
 	// contain a multidimensional 	array similar to grid just that instead
 	// of containing the number that goes in each square, it 	will contain
-	// another array with the coordinates to get the actual value from grid, just
+	// another array with the coordinates to get the actual value from grid,
+	// just
 	// as if 	the relativeGrid was rotated r times clockwise. The purpose of
 	// this variable is to be able to 	manipulate the grid in the same way, no
 	// matter which direction the user wants to click
@@ -60,7 +61,8 @@ int main() {
 					relativeGrid[r][x][y][1] = y;
 				} else {
 					relativeGrid[r][x][y][0] = relativeGrid[r - 1][x][y][1];
-					relativeGrid[r][x][y][1] = gridSize - 1 - relativeGrid[r - 1][x][y][0];
+					relativeGrid[r][x][y][1] =
+						gridSize - 1 - relativeGrid[r - 1][x][y][0];
 				}
 			}
 		}
@@ -133,7 +135,7 @@ void display(int2D grid, int gridSize) {
 	cout << "Moves: " << moves << endl;
 	cout << "Score: " << score << endl;
 	cout << string(29, '-') << endl;
-	
+
 	// Print Grid
 	cout << " ______";
 	for (int i = 1; i < gridSize; i++) {
@@ -142,7 +144,7 @@ void display(int2D grid, int gridSize) {
 	cout << endl;
 	for (int x = 0; x < gridSize; x++) {
 		for (int i = 0; i < gridSize; i++) {
-			cout << "|      ";
+			cout << "|			";
 		}
 		cout << '|' << endl;
 		for (int y = 0; y < gridSize; y++) {
@@ -199,7 +201,8 @@ bool gameOver(int2D grid, int gridSize) {
 	// Check for possible joins on last row and column
 	int last = gridSize - 1;
 	for (int i = 0; i < last; i++) {
-		if (grid[i][last] == grid[i + 1][last] || grid[last][i] == grid[last][i + 1]){
+		if (grid[i][last] == grid[i + 1][last] ||
+			grid[last][i] == grid[last][i + 1]) {
 			return false;
 		}
 	}
@@ -268,13 +271,13 @@ int2D move(int3D relativeGrid, int2D grid, int gridSize) {
  * return grid
  */
 int2D joinSquares(int3D relativeGrid, int2D grid, int gridSize) {
-	for(int x = 0; x < gridSize; x++) {
-		for (int y = 0; y < gridSize-1; y++) {
+	for (int x = 0; x < gridSize; x++) {
+		for (int y = 0; y < gridSize - 1; y++) {
 			int bottomX = relativeGrid[x][y][0];
 			int bottomY = relativeGrid[x][y][1];
 			if (grid[bottomX][bottomY]) {
-				int topX = relativeGrid[x][y+1][0];
-				int topY = relativeGrid[x][y+1][1];
+				int topX = relativeGrid[x][y + 1][0];
+				int topY = relativeGrid[x][y + 1][1];
 				if (grid[bottomX][bottomY] == grid[topX][topY]) {
 					score += (grid[bottomX][bottomY] *= 2);
 					grid[topX][topY] = 0;
@@ -282,6 +285,6 @@ int2D joinSquares(int3D relativeGrid, int2D grid, int gridSize) {
 			}
 		}
 	}
-	
+
 	return grid;
 }
