@@ -15,80 +15,117 @@ bool gameOver(int2D grid, int gridSize);
 int keyPress();
 int2D move(int3D relativeGrid, int2D grid, int gridSize);
 int2D joinSquares(int3D relativeGrid, int2D grid, int gridSize);
+void clear();
 
 int moves, score;
 
 int main() {
 	srand(time(0));
-	system("clear||CLR");
+	clear();
 
-	//	Ask for grid size gridSize
 	int gridSize;
 	int const max = 10;
 	int const min = 2;
-	cout << "Enter a grid size:" << endl;
-	cout << "Example: For a 4x4 grid, type \"4\"" << endl;
-	cin >> gridSize;
 
-	//	Is gridSize more than 1 (and less than max)?
-	while (gridSize < min || gridSize > max) {
-		cout << "Size must be between " << min << " and " << max << endl;
-		cin >> gridSize;
-	}
+	while (true) {
+		//	Ask for grid size gridSize
+		//	Is gridSize more than 1 (and less than max)?
+		do {
+			cout << "Enter a grid size:" << endl;
+			char x;
+			cin >> x;
+			gridSize = (int)x - (int)'0';
+			clear();
+		} while ((gridSize < min || gridSize > max)
+					 ? (bool)(cout << "Size must be an integer between " << min
+								   << " and "
+								   << max
+								   << endl)
+					 : false);
 
-	//	Define grid as mutidimentional array with the size from gridSize where
-	// the first level of the 	array will have the columns of the grid, and the
-	// second level will have rows. So for example, 	grid[0][2] will refer to
-	// the square which is in the 3rd column from the left and the first row
-	// from the bottom, and the value will be the number that should be in that
-	// square.
-	int2D grid(gridSize, int1D(gridSize, 0));
+		//	Define grid as mutidimentional array with the size from gridSize
+		// where
+		// the first level of the 	array will have the columns of the grid, and
+		// the
+		// second level will have rows. So for example, 	grid[0][2] will
+		// refer
+		// to
+		// the square which is in the 3rd column from the left and the first row
+		// from the bottom, and the value will be the number that should be in
+		// that
+		// square.
+		int2D grid(gridSize, int1D(gridSize, 0));
 
-	//	Define relativeGrid as an array with 4 elements. Each element will
-	// contain a multidimensional 	array similar to grid just that instead
-	// of containing the number that goes in each square, it 	will contain
-	// another array with the coordinates to get the actual value from grid,
-	// just
-	// as if 	the relativeGrid was rotated r times clockwise. The purpose of
-	// this variable is to be able to 	manipulate the grid in the same way, no
-	// matter which direction the user wants to click
-	int4D relativeGrid(4, int3D(gridSize, int2D(gridSize, int1D(2, 0))));
-	for (int r = 0; r < 4; r++) {
-		for (int x = 0; x < gridSize; x++) {
-			for (int y = 0; y < gridSize; y++) {
-				if (r == 0) {
-					relativeGrid[r][x][y][0] = x;
-					relativeGrid[r][x][y][1] = y;
-				} else {
-					relativeGrid[r][x][y][0] = relativeGrid[r - 1][x][y][1];
-					relativeGrid[r][x][y][1] =
-						gridSize - 1 - relativeGrid[r - 1][x][y][0];
+		//	Define relativeGrid as an array with 4 elements. Each element will
+		// contain a multidimensional 	array similar to grid just that instead
+		// of containing the number that goes in each square, it 	will contain
+		// another array with the coordinates to get the actual value from grid,
+		// just
+		// as if 	the relativeGrid was rotated r times clockwise. The purpose
+		// of
+		// this variable is to be able to 	manipulate the grid in the same way,
+		// no
+		// matter which direction the user wants to click
+		int4D relativeGrid(4, int3D(gridSize, int2D(gridSize, int1D(2, 0))));
+		for (int r = 0; r < 4; r++) {
+			for (int x = 0; x < gridSize; x++) {
+				for (int y = 0; y < gridSize; y++) {
+					if (r == 0) {
+						relativeGrid[r][x][y][0] = x;
+						relativeGrid[r][x][y][1] = y;
+					} else {
+						relativeGrid[r][x][y][0] = relativeGrid[r - 1][x][y][1];
+						relativeGrid[r][x][y][1] =
+							gridSize - 1 - relativeGrid[r - 1][x][y][0];
+					}
 				}
 			}
 		}
-	}
 
-	grid = populate(grid, gridSize);
-	grid = populate(grid, gridSize);
-	while (true) {
-		//	every move is a new iteration of this loop.
-		//	continue this loop until player has lost.
-		display(grid, gridSize);
-		if (gameOver(grid, gridSize)) {
-			break;
+		moves = 0;
+		score = 0;
+		grid = populate(grid, gridSize);
+		grid = populate(grid, gridSize);
+		while (true) {
+			//	every move is a new iteration of this loop.
+			//	continue this loop until player has lost.
+			display(grid, gridSize);
+			if (gameOver(grid, gridSize)) {
+				break;
+			}
+			int direction = keyPress();
+			int2D gridOld = grid;
+			grid = move(relativeGrid[direction], grid, gridSize);
+			grid = joinSquares(relativeGrid[direction], grid, gridSize);
+			grid = move(relativeGrid[direction], grid, gridSize);
+			if (grid != gridOld) {
+				grid = populate(grid, gridSize);
+				moves++;
+			}
 		}
-		int direction = keyPress();
-		int2D gridOld = grid;
-		grid = move(relativeGrid[direction], grid, gridSize);
-		grid = joinSquares(relativeGrid[direction], grid, gridSize);
-		grid = move(relativeGrid[direction], grid, gridSize);
-		if (grid != gridOld) {
-			grid = populate(grid, gridSize);
-			moves++;
+
+		char yn;
+		do {
+			cout << endl
+				 << "Game over!" << endl
+				 << "Do you want to play again? (Y/N)" << endl;
+			cin >> yn;
+			clear();
+		} while (!(yn == 'Y' || yn == 'y' || yn == 'N' || yn == 'n'));
+
+		if (yn == 'N' || yn == 'n') {
+			break;
 		}
 	}
 
 	return 0;
+}
+
+/*
+ * Clear the screen
+ */
+void clear() {
+	system("clear||CLR");
 }
 
 /*
@@ -132,7 +169,7 @@ int2D populate(int2D grid, int gridSize) {
  */
 void display(int2D grid, int gridSize) {
 	// Clear Screen
-	system("clear||CLR");
+	clear();
 
 	// Print Stats
 	cout << string(29, '-') << endl;
