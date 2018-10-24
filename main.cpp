@@ -69,19 +69,23 @@ int main() {
 	}
 
 	grid = populate(grid, gridSize);
+	grid = populate(grid, gridSize);
 	while (true) {
 		//	every move is a new iteration of this loop.
 		//	continue this loop until player has lost.
-		grid = populate(grid, gridSize);
 		display(grid, gridSize);
 		if (gameOver(grid, gridSize)) {
 			break;
 		}
 		int direction = keyPress();
+		int2D gridOld = grid;
 		grid = move(relativeGrid[direction], grid, gridSize);
 		grid = joinSquares(relativeGrid[direction], grid, gridSize);
 		grid = move(relativeGrid[direction], grid, gridSize);
-		moves++;
+		if (grid != gridOld) {
+			grid = populate(grid, gridSize);
+			moves++;
+		}
 	}
 
 	return 0;
@@ -144,7 +148,7 @@ void display(int2D grid, int gridSize) {
 	cout << endl;
 	for (int x = 0; x < gridSize; x++) {
 		for (int i = 0; i < gridSize; i++) {
-			cout << "|			";
+			cout << "|      ";
 		}
 		cout << '|' << endl;
 		for (int y = 0; y < gridSize; y++) {
