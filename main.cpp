@@ -86,15 +86,30 @@ int main() {
 		score = 0;
 		grid = populate(grid, gridSize);
 		grid = populate(grid, gridSize);
+		int direction = -3;
+		int2D gridOld;
+
 		while (true) {
+		newTurn:;
 			//	every move is a new iteration of this loop.
 			//	continue this loop until player has lost.
 			display(grid, gridSize);
 			if (gameOver(grid, gridSize)) {
 				break;
 			}
-			int direction = keyPress();
-			int2D gridOld = grid;
+
+			do {
+				if (direction == -1 && moves != 0) {
+					// Undo
+					grid = gridOld;
+					direction = -3;
+					moves--;
+					goto newTurn;
+				}
+				direction = keyPress();
+			} while (direction < 0);
+
+			gridOld = grid;
 			grid = move(relativeGrid[direction], grid, gridSize);
 			grid = joinSquares(relativeGrid[direction], grid, gridSize);
 			grid = move(relativeGrid[direction], grid, gridSize);
@@ -258,9 +273,7 @@ bool gameOver(int2D grid, int gridSize) {
 int keyPress() {
 	int direction;
 	char key;
-	do {
-		cin >> key;
-	} while (key != 's' && key != 'a' && key != 'd' && key != 'w');
+	cin >> key;
 	if (key == 's') {
 		direction = 0;
 	} else if (key == 'a') {
@@ -269,6 +282,12 @@ int keyPress() {
 		direction = 3;
 	} else if (key == 'w') {
 		direction = 2;
+	} else if (key == 'z') {
+		direction = -1;  // Undo
+	} else if (key == 'q') {
+		direction = -2;  // Quit
+	} else {
+		direction = -3;  // Invalid
 	}
 
 	return direction;
