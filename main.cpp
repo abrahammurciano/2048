@@ -106,6 +106,10 @@ int main() {
 					moves--;
 					goto newTurn;
 				}
+				if (direction == -2) {
+					clear();
+					goto playAgainPrompt;
+				}
 				direction = keyPress();
 			} while (direction < 0);
 
@@ -120,10 +124,10 @@ int main() {
 		}
 
 		char yn;
+		cout << endl << "Game over!" << endl;
 		do {
-			cout << endl
-				 << "Game over!" << endl
-				 << "Do you want to play again? (Y/N)" << endl;
+		playAgainPrompt:
+			cout << "Do you want to play again? (Y/N)" << endl;
 			cin >> yn;
 			clear();
 		} while (!(yn == 'Y' || yn == 'y' || yn == 'N' || yn == 'n'));
@@ -275,13 +279,13 @@ int keyPress() {
 	char key;
 	cin >> key;
 	if (key == 's') {
-		direction = 0;
+		direction = 0;  // Down
 	} else if (key == 'a') {
-		direction = 1;
+		direction = 1;  // Left
 	} else if (key == 'd') {
-		direction = 3;
+		direction = 3;  // Rgiht
 	} else if (key == 'w') {
-		direction = 2;
+		direction = 2;  // Up
 	} else if (key == 'z') {
 		direction = -1;  // Undo
 	} else if (key == 'q') {
