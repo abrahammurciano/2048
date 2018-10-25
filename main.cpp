@@ -144,7 +144,7 @@ int main() {
  * Clear the screen
  */
 void clear() {
-	system("clear||CLR");
+	system("clear||CLS");
 }
 
 /*
