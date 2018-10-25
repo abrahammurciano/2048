@@ -9,23 +9,24 @@ typedef vector<int1D> int2D;
 typedef vector<int2D> int3D;
 typedef vector<int3D> int4D;
 
-int2D populate(int2D grid, int gridSize);
-void display(int2D grid, int gridSize);
-bool gameOver(int2D grid, int gridSize);
-int keyPress();
-int2D move(int3D relativeGrid, int2D grid, int gridSize);
-int2D joinSquares(int3D relativeGrid, int2D grid, int gridSize);
+void populate();
+void display();
+bool gameOver();
+void keyPress();
+void move();
+void joinSquares();
 void clear();
 
-int moves, score;
+int moves, score, gridSize, direction = -3;
+int2D grid(0);
+int2D gridOld(0);
+int4D relativeGrid(0);
+int const maxGridSize = 9;
+int const minGridSize = 2;
 
 int main() {
 	srand(time(0));
 	clear();
-
-	int gridSize;
-	int const max = 10;
-	int const min = 2;
 
 	while (true) {
 		//	Ask for grid size gridSize
@@ -36,10 +37,11 @@ int main() {
 			cin >> x;
 			gridSize = (int)x - (int)'0';
 			clear();
-		} while ((gridSize < min || gridSize > max)
-					 ? (bool)(cout << "Size must be an integer between " << min
+		} while ((gridSize < minGridSize || gridSize > maxGridSize)
+					 ? (bool)(cout << "Size must be an integer between "
+								   << minGridSize
 								   << " and "
-								   << max
+								   << maxGridSize
 								   << endl)
 					 : false);
 
@@ -54,7 +56,8 @@ int main() {
 		// from the bottom, and the value will be the number that should be in
 		// that
 		// square.
-		int2D grid(gridSize, int1D(gridSize, 0));
+		grid.resize(0);
+		grid.resize(gridSize, int1D(gridSize, 0));
 
 		//	Define relativeGrid as an array with 4 elements. Each element will
 		// contain a multidimensional 	array similar to grid just that instead
@@ -66,7 +69,8 @@ int main() {
 		// this variable is to be able to 	manipulate the grid in the same way,
 		// no
 		// matter which direction the user wants to click
-		int4D relativeGrid(4, int3D(gridSize, int2D(gridSize, int1D(2, 0))));
+		relativeGrid.resize(0);
+		relativeGrid.resize(4, int3D(gridSize, int2D(gridSize, int1D(2, 0))));
 		for (int r = 0; r < 4; r++) {
 			for (int x = 0; x < gridSize; x++) {
 				for (int y = 0; y < gridSize; y++) {
@@ -84,17 +88,15 @@ int main() {
 
 		moves = 0;
 		score = 0;
-		grid = populate(grid, gridSize);
-		grid = populate(grid, gridSize);
-		int direction = -3;
-		int2D gridOld;
+		populate();
+		populate();
 
 		while (true) {
 		newTurn:;
 			//	every move is a new iteration of this loop.
 			//	continue this loop until player has lost.
-			display(grid, gridSize);
-			if (gameOver(grid, gridSize)) {
+			display();
+			if (gameOver()) {
 				break;
 			}
 
@@ -107,18 +109,20 @@ int main() {
 					goto newTurn;
 				}
 				if (direction == -2) {
+					// Quit
 					clear();
+					direction = -3;
 					goto playAgainPrompt;
 				}
-				direction = keyPress();
+				keyPress();
 			} while (direction < 0);
 
 			gridOld = grid;
-			grid = move(relativeGrid[direction], grid, gridSize);
-			grid = joinSquares(relativeGrid[direction], grid, gridSize);
-			grid = move(relativeGrid[direction], grid, gridSize);
+			move();
+			joinSquares();
+			move();
 			if (grid != gridOld) {
-				grid = populate(grid, gridSize);
+				populate();
 				moves++;
 			}
 		}
@@ -151,7 +155,7 @@ void clear() {
  * stick some new squares into grid (according to rules of the game). returns
  * grid
  */
-int2D populate(int2D grid, int gridSize) {
+void populate() {
 	int2D emptySquares;
 	for (int x = 0; x < gridSize; x++) {
 		for (int y = 0; y < gridSize; y++) {
@@ -178,7 +182,6 @@ int2D populate(int2D grid, int gridSize) {
 		int y = emptySquares[randomSquare][1];
 		grid[x][y] = value;
 	}
-	return grid;
 }
 
 /*
@@ -186,7 +189,7 @@ int2D populate(int2D grid, int gridSize) {
  * (Possibly can detect size of terminal and acomodate the grid accordingly)
  * (Possibly use colours)
  */
-void display(int2D grid, int gridSize) {
+void display() {
 	// Clear Screen
 	clear();
 
@@ -240,7 +243,7 @@ void display(int2D grid, int gridSize) {
  * if any 2 adjacent squares in grid are the same, return false.
  * return true
  */
-bool gameOver(int2D grid, int gridSize) {
+bool gameOver() {
 	// Check if there's an empty square
 	for (int x = 0; x < gridSize; x++) {
 		for (int y = 0; y < gridSize; y++) {
@@ -274,8 +277,7 @@ bool gameOver(int2D grid, int gridSize) {
  * input.
  * TODO: change input method to use arrows w/o enter
  */
-int keyPress() {
-	int direction;
+void keyPress() {
 	char key;
 	cin >> key;
 	if (key == 's') {
@@ -293,8 +295,6 @@ int keyPress() {
 	} else {
 		direction = -3;  // Invalid
 	}
-
-	return direction;
 }
 
 /*
@@ -303,16 +303,16 @@ int keyPress() {
  * relativeGrid (starting from bottom) with that of the lowest zero square below
  * it and storing that in currentGrid. return currentGrid
  */
-int2D move(int3D relativeGrid, int2D grid, int gridSize) {
+void move() {
 	for (int x = 0; x < gridSize; x++) {
 		int lowestEmpty = -1;
 		for (int y = 0; y < gridSize; y++) {
-			int xGrid = relativeGrid[x][y][0];
-			int yGrid = relativeGrid[x][y][1];
+			int xGrid = relativeGrid[direction][x][y][0];
+			int yGrid = relativeGrid[direction][x][y][1];
 			if (grid[xGrid][yGrid]) {
 				if (lowestEmpty != -1) {
-					int newXGrid = relativeGrid[x][lowestEmpty][0];
-					int newYGrid = relativeGrid[x][lowestEmpty][1];
+					int newXGrid = relativeGrid[direction][x][lowestEmpty][0];
+					int newYGrid = relativeGrid[direction][x][lowestEmpty][1];
 					grid[newXGrid][newYGrid] = grid[xGrid][yGrid];
 					grid[xGrid][yGrid] = 0;
 					lowestEmpty++;
@@ -322,8 +322,6 @@ int2D move(int3D relativeGrid, int2D grid, int gridSize) {
 			}
 		}
 	}
-
-	return grid;
 }
 
 /*
@@ -334,14 +332,14 @@ int2D move(int3D relativeGrid, int2D grid, int gridSize) {
  * and write those new values into grid.
  * return grid
  */
-int2D joinSquares(int3D relativeGrid, int2D grid, int gridSize) {
+void joinSquares() {
 	for (int x = 0; x < gridSize; x++) {
 		for (int y = 0; y < gridSize - 1; y++) {
-			int bottomX = relativeGrid[x][y][0];
-			int bottomY = relativeGrid[x][y][1];
+			int bottomX = relativeGrid[direction][x][y][0];
+			int bottomY = relativeGrid[direction][x][y][1];
 			if (grid[bottomX][bottomY]) {
-				int topX = relativeGrid[x][y + 1][0];
-				int topY = relativeGrid[x][y + 1][1];
+				int topX = relativeGrid[direction][x][y + 1][0];
+				int topY = relativeGrid[direction][x][y + 1][1];
 				if (grid[bottomX][bottomY] == grid[topX][topY]) {
 					score += (grid[bottomX][bottomY] *= 2);
 					grid[topX][topY] = 0;
@@ -349,6 +347,4 @@ int2D joinSquares(int3D relativeGrid, int2D grid, int gridSize) {
 			}
 		}
 	}
-
-	return grid;
 }
