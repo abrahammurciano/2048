@@ -30,20 +30,16 @@ int main() {
 
 	while (true) {
 		//	Ask for grid size gridSize
-		//	Is gridSize more than 1 (and less than max)?
-		do {
+		//	Is gridSize more than min and less than max?
+		while (true) {
 			cout << "Enter a grid size:" << endl;
-			char x;
-			cin >> x;
-			gridSize = (int)x - (int)'0';
+			cin >> gridSize;
+			if (gridSize >= minGridSize && gridSize <= maxGridSize)
+				break;
 			clear();
-		} while ((gridSize < minGridSize || gridSize > maxGridSize)
-					 ? (bool)(cout << "Size must be an integer between "
-								   << minGridSize
-								   << " and "
-								   << maxGridSize
-								   << endl)
-					 : false);
+			cout << "Size must be an integer between " << minGridSize << " and "
+				 << maxGridSize << endl;
+		}
 
 		//	Define grid as mutidimentional array with the size from gridSize
 		// where
