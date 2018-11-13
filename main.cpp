@@ -41,7 +41,7 @@ int main() {
 				 << maxGridSize << endl;
 		}
 
-		//	Define grid as mutidimentional array with the size from gridSize
+		//	Define grid as multidimensional array with the size from gridSize
 		// where
 		// the first level of the 	array will have the columns of the grid, and
 		// the
@@ -182,7 +182,7 @@ void populate() {
 
 /*
  * Output the grid onto the terminal
- * (Possibly can detect size of terminal and acomodate the grid accordingly)
+ * (Possibly can detect size of terminal and accommodate the grid accordingly)
  * (Possibly use colours)
  */
 void display() {
